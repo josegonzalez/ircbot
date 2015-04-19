@@ -75,7 +75,7 @@ func (i *Bot) msgHandler(s ircx.Sender, m *irc.Message) {
 	ev := &MessageEvent{
 		Sender:   m.Name,
 		Text:     m.Trailing,
-		Channels: m.Params[0],
+		Channel: m.Params[0],
 	}
 	i.chEvents <- ev
 }
