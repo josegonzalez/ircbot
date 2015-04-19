@@ -43,14 +43,14 @@ func (i *Bot) Start() (chan *MessageEvent, error) {
 	return i.chEvents, nil
 }
 
-func (i *Bot) SendMessage(nick, msg string) {
+func (i *Bot) SendMessage(nick, msg, channel string) {
 	msgBuf := bytes.NewBufferString("")
 
 	fmt.Fprintf(msgBuf, "<%s> %s", nick, msg)
 
 	i.bot.SendMessage(&irc.Message{
 		Command:  "PRIVMSG",
-		Params:   i.channels,
+		Params:   []string{channel},
 		Trailing: msgBuf.String(),
 	})
 }
@@ -73,18 +73,20 @@ func (i *Bot) registerHandlers() {
 
 func (i *Bot) msgHandler(s ircx.Sender, m *irc.Message) {
 	ev := &MessageEvent{
-		Sender:   m.Name,
-		Text:     m.Trailing,
+		Sender:  m.Name,
+		Text:    m.Trailing,
 		Channel: m.Params[0],
 	}
 	i.chEvents <- ev
 }
 
 func (i *Bot) registerConnect(s ircx.Sender, m *irc.Message) {
-	s.Send(&irc.Message{
-		Command: irc.JOIN,
-		Params:  i.channels,
-	})
+	for _, ch := range i.channels {
+		s.Send(&irc.Message{
+			Command: irc.JOIN,
+			Params:  []string{ch},
+		})
+	}
 
 }
 
