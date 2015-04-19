@@ -16,8 +16,9 @@ type (
 	}
 
 	MessageEvent struct {
-		Sender string
-		Text   string
+		Sender  string
+		Text    string
+		Channel string
 	}
 )
 
@@ -72,8 +73,9 @@ func (i *Bot) registerHandlers() {
 
 func (i *Bot) msgHandler(s ircx.Sender, m *irc.Message) {
 	ev := &MessageEvent{
-		Sender: m.Name,
-		Text:   m.Trailing,
+		Sender:   m.Name,
+		Text:     m.Trailing,
+		Channels: m.Params[0],
 	}
 	i.chEvents <- ev
 }
