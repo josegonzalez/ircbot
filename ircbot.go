@@ -22,10 +22,18 @@ type (
 	}
 )
 
-func New(server, nick string, channels []string) *Bot {
+func New(server, nick string, password, channels []string) *Bot {
+	if password == "" {
+		return &Bot{
+			channels: channels,
+			bot:      ircx.Classic(server, nick),
+			chEvents: make(chan *MessageEvent),
+		}
+	}
+
 	return &Bot{
 		channels: channels,
-		bot:      ircx.Classic(server, nick),
+		bot:      ircx.WithLogin(server, nick, nick, password),
 		chEvents: make(chan *MessageEvent),
 	}
 }
