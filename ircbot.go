@@ -22,7 +22,7 @@ type (
 	}
 )
 
-func New(server, nick string, password, channels []string) *Bot {
+func New(server, nick string, password string, channels []string) *Bot {
 	if password == "" {
 		return &Bot{
 			channels: channels,
