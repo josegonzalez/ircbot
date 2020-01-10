@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/sorcix/irc"
+	"github.com/sorcix/irc.v2"
 	"github.com/voldyman/ircx"
 )
 
